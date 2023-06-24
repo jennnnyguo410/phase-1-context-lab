@@ -35,3 +35,50 @@ function createEmployeeRecord(array) {
 function createEmployeeRecords(records) {
     return records.map(createEmployeeRecord)
 }
+
+function createTimeInEvent(dateStamp) {
+    const [date, time] = dateStamp.split(" ")
+    const timeInEvent = {
+        type: "TimeIn",
+        date: date,
+        hour: parseInt(time)
+    }
+    this.timeInEvents.push(timeInEvent)
+    return this
+}
+
+function createTimeOutEvent(dateStamp) {
+    const [date, time] = dateStamp.split(" ")
+    const timeOutEvent = {
+        type: "TimeOut",
+        date: date,
+        hour: parseInt(time)
+    }
+    this.timeOutEvents.push(timeOutEvent)
+    return this
+}
+
+function hoursWorkedOnDate(dateStamp) {
+    let inEvent = this.timeInEvents.find(function (e) {
+        return e.date === dateStamp;
+    })
+
+    let outEvent = this.timeOutEvents.find(function (e) {
+        return e.date === dateStamp;
+    })
+    return (outEvent.hour - inEvent.hour) / 100;
+}
+
+function wagesEarnedOnDate(date) {
+    let hoursWorked = hoursWorkedOnDate.call(this, date)
+    return hoursWorked * this.payPerHour
+}
+function findEmployeeByFirstName(recordArray, firstName) {
+    return recordArray.find(record => record.firstName === firstName)
+}
+
+function calculatePayroll(records) {
+    return records.reduce(function (total, record) {
+        return total + allWagesFor.call(record)
+    }, 0)
+}
